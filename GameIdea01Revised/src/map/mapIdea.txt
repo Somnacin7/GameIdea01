@@ -1,0 +1,5 @@
+Instead of static ints for each tile, load from json, and let the user define which tile is which int
+
+01 : tiletype
+02 : tiletype
+...
