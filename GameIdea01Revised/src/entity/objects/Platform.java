@@ -51,6 +51,8 @@ public class Platform extends Entity
 		incrementx();
 
 		incrementy();
+		
+		boundingBox = new Rectangle((int) x,(int) y, 32, 16);
 
 	}
 
