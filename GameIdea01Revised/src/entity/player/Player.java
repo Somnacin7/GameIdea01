@@ -193,14 +193,26 @@ public class Player extends Entity
 		g.drawImage(currentState.getImage(this), (int) (x + tileMap.getx()), (int) (y + tileMap.gety()), null);
 
 		/*
-		 * g.setColor(Color.RED); int xcol = (int) (boundingBox.getCenterX() / tileMap.getTileSize()); int yrow = (int) (boundingBox.getCenterY() / tileMap.getTileSize());
-		 * 
-		 * int row = 0, col = 0; for (int r = yrow - 1; r < yrow - 1 + 3; r++) { for (int c = xcol - 1; c < xcol - 1 + 3; c++) { if (tileMap.getTileCollision(r, c)) { g.fillRect(c * tileMap.getTileSize() + (int)tileMap.getx(), r * tileMap.getTileSize() + (int)tileMap.gety(), tileMap.getTileSize(), tileMap.getTileSize()); }
-		 * 
-		 * 
-		 * col++; } row++; col = 0; }
-		 */
+		g.setColor(Color.RED);
+		int xcol = (int) (boundingBox.getCenterX() / tileMap.getTileSize());
+		int yrow = (int) (boundingBox.getCenterY() / tileMap.getTileSize());
 
+		int row = 0, col = 0;
+		for (int r = yrow - 1; r < yrow - 1 + 3; r++)
+		{
+			for (int c = xcol - 1; c < xcol - 1 + 3; c++)
+			{
+				if (tileMap.getTileCollision(r, c))
+				{
+					g.fillRect(c * tileMap.getTileSize() + (int) tileMap.getx(), r * tileMap.getTileSize() + (int) tileMap.gety(), tileMap.getTileSize(), tileMap.getTileSize());
+				}
+
+				col++;
+			}
+			row++;
+			col = 0;
+		}
+		*/
 	}
 
 	public void setTilePosition(int x, int y)
@@ -223,7 +235,7 @@ public class Player extends Entity
 	{
 		currentState.exit(this);
 		currentState = state;
-		
+
 		// Check if player exits teleport inside a block. If so, kill that player
 		int row = (int) (getBoundingBox().getCenterY()) / getTileMap().getTileSize();
 		int col = (int) (getBoundingBox().getCenterX()) / getTileMap().getTileSize();
@@ -232,7 +244,7 @@ public class Player extends Entity
 		{
 			setState(DEAD);
 		}
-		
+
 		currentState.enter(this, keys);
 	}
 
