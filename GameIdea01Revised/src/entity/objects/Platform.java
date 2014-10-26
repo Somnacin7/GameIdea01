@@ -138,10 +138,6 @@ public class Platform extends Entity
 			selectNextPoint();
 		else if (xTime < 1 && yTime < 1)
 			selectNextPoint();
-		
-		System.out.println("X:\t" + x);
-		System.out.println("Y:\t" + y);
-		System.out.println("curPoint:\t" + currentPoint);
 	}
 
 	
