@@ -1,10 +1,13 @@
 package gameState;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import map.Background;
 import map.TileMap;
 import utility.Keys;
+import entity.Entity;
+import entity.objects.Platform;
 import entity.player.Player;
 import game.GamePanel;
 
@@ -18,6 +21,10 @@ public class Level1State extends GameState
 	private Player player;
 
 	private TileMap tileMap;
+	
+	private Platform platform;
+	
+	// TODO add entity array or other entity system
 
 	public Level1State(GameStateManager gsm, Keys keys)
 	{
@@ -44,6 +51,12 @@ public class Level1State extends GameState
 		// Player init
 		player = new Player(tileMap, keys);
 		player.setTilePosition(15, 12);
+		
+		// Other Entities and Enemies? TODO Support text file loading for entities (like TileMaps)
+		platform = new Platform(tileMap, keys, 13 * tileMap.getTileSize(), 4 * tileMap.getTileSize());
+		platform.addPoint(18 * tileMap.getTileSize(), 5 * tileMap.getTileSize());
+		platform.addPoint(14 * tileMap.getTileSize(), 6 * tileMap.getTileSize());
+		platform.setSpeed(2);
 	}
 	
 	public void processInput()
@@ -57,6 +70,8 @@ public class Level1State extends GameState
 		tileMap.setPosition((GamePanel.WIDTH / 2) - player.getx(), (GamePanel.HEIGHT / 2) - player.gety());
 		mountains.setPosition((int)tileMap.getx(), (int)tileMap.gety());
 		clouds.setPosition(tileMap.getx(), tileMap.gety());
+		
+		platform.update();
 	}
 
 	public void draw(Graphics2D g)
@@ -68,6 +83,8 @@ public class Level1State extends GameState
 		tileMap.draw(g);
 		
 		player.draw(g);
+		
+		platform.draw(g);
 	}
 
 	
