@@ -20,17 +20,17 @@ public class Level1State extends GameState
 	
 	private Player player;
 
-	private TileMap tileMap;
-	
-	private Platform platform;
+	private TileMap tileMap;	
+	private Platform platform0;
 	
 	// TODO add entity array or other entity system
+	// For now I am using a platform array since its the only entity
+	private ArrayList<Platform> platforms;
 
 	public Level1State(GameStateManager gsm, Keys keys)
 	{
 		this.gsm = gsm;
 		this.keys = keys;
-		init();
 	}
 
 	public void init()
@@ -53,10 +53,14 @@ public class Level1State extends GameState
 		player.setTilePosition(15, 12);
 		
 		// Other Entities and Enemies? TODO Support text file loading for entities (like TileMaps)
-		platform = new Platform(tileMap, keys, 13 * tileMap.getTileSize(), 4 * tileMap.getTileSize());
-		platform.addPoint(18 * tileMap.getTileSize(), 5 * tileMap.getTileSize());
-		platform.addPoint(14 * tileMap.getTileSize(), 6 * tileMap.getTileSize());
-		platform.setSpeed(2);
+		platforms = new ArrayList<Platform>();
+		
+		platform0 = new Platform(tileMap, keys, 13 * tileMap.getTileSize(), 4 * tileMap.getTileSize());
+		platform0.addPoint(18 * tileMap.getTileSize(), 5 * tileMap.getTileSize());
+		platform0.addPoint(14 * tileMap.getTileSize(), 6 * tileMap.getTileSize());
+		platform0.setSpeed(2);
+		platforms.add(platform0);
+		
 	}
 	
 	public void processInput()
@@ -71,7 +75,10 @@ public class Level1State extends GameState
 		mountains.setPosition((int)tileMap.getx(), (int)tileMap.gety());
 		clouds.setPosition(tileMap.getx(), tileMap.gety());
 		
-		platform.update();
+		for (Platform p: platforms)
+		{
+			p.update();
+		}
 	}
 
 	public void draw(Graphics2D g)
@@ -84,7 +91,10 @@ public class Level1State extends GameState
 		
 		player.draw(g);
 		
-		platform.draw(g);
+		for (Platform p: platforms)
+		{
+			p.draw(g);
+		}
 	}
 
 	

@@ -14,7 +14,7 @@ public class GameStateManager
 	
 	private HashMap<Integer, GameState> stateHash;
 	
-	int currentState;
+	private int currentState;
 	
 	private Keys keys;
 	
