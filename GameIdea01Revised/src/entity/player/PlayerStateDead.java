@@ -23,7 +23,9 @@ public class PlayerStateDead implements PlayerState
 	}
 	
 	public void enter(Player player, Keys keys)
-	{}
+	{
+		player.kill();
+	}
 	
 	public void processInput(Player player, Keys keys)
 	{

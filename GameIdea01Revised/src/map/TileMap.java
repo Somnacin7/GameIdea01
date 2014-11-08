@@ -280,6 +280,12 @@ public class TileMap
 		return tileSize;
 	}
 	
+	// I hate typing getTileSize all the time
+	public int gts()
+	{
+		return getTileSize();
+	}
+	
 	public boolean getTileCollision(int r, int c)
 	{
 		// If it does not exist

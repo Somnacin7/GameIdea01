@@ -10,7 +10,7 @@ import utility.Animation;
 import utility.Keys;
 import entity.Entity;
 
-public class Platform extends Entity
+public class Platform extends Entity implements Collidable
 {
 	private Keys keys; // Perhaps a later mechanic can be arrow key presses interacting with platforms
 

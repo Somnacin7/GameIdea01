@@ -2,10 +2,12 @@ package entity.player;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import map.TileMap;
 import utility.Keys;
 import entity.Entity;
+import entity.objects.Collidable;
 
 public class Player extends Entity
 {
@@ -15,6 +17,8 @@ public class Player extends Entity
 	private double x, y;
 
 	private boolean facingRight;
+	
+	private boolean isDead;
 
 	// Velocity
 	private double dx, dy;
@@ -35,6 +39,7 @@ public class Player extends Entity
 	private final int BOX_WIDTH = 13;
 	private final int BOX_HEIGHT = 26;
 	private Rectangle[][] surroundingTiles; // Holds whether or not the surrounding tiles collide
+	private ArrayList<Collidable> collisions;
 
 	private boolean hasTeleported;
 
@@ -57,7 +62,7 @@ public class Player extends Entity
 	{
 		currentState = STANDING;
 		surroundingTiles = new Rectangle[3][3];
-
+		isDead = false;
 	}
 
 	public void processInput(Keys keys)
@@ -312,5 +317,15 @@ public class Player extends Entity
 	{
 		return tileMap;
 	}
-
+	
+	public boolean getIsDead()
+	{
+		return isDead;
+	}
+	
+	public void kill()
+	{
+		isDead = true;
+	}
+	
 }

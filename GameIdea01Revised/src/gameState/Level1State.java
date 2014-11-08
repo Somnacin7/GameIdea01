@@ -21,11 +21,9 @@ public class Level1State extends GameState
 	private Player player;
 
 	private TileMap tileMap;	
-	private Platform platform0;
 	
-	// TODO add entity array or other entity system
-	// For now I am using a platform array since its the only entity
-	private ArrayList<Platform> platforms;
+	// TODO Hopefully this is a sufficent entity system
+	private ArrayList<Entity> entities;
 
 	public Level1State(GameStateManager gsm, Keys keys)
 	{
@@ -53,13 +51,18 @@ public class Level1State extends GameState
 		player.setTilePosition(15, 12);
 		
 		// Other Entities and Enemies? TODO Support text file loading for entities (like TileMaps)
-		platforms = new ArrayList<Platform>();
+		entities = new ArrayList<Entity>();
 		
-		platform0 = new Platform(tileMap, keys, 13 * tileMap.getTileSize(), 4 * tileMap.getTileSize());
-		platform0.addPoint(18 * tileMap.getTileSize(), 5 * tileMap.getTileSize());
-		platform0.addPoint(14 * tileMap.getTileSize(), 6 * tileMap.getTileSize());
-		platform0.setSpeed(2);
-		platforms.add(platform0);
+		Platform p = new Platform(tileMap, keys, 13 * tileMap.gts(), 4 * tileMap.gts());
+		p.addPoint(18 * tileMap.gts(), 5 * tileMap.gts());
+		p.addPoint(14 * tileMap.gts(), 6 * tileMap.gts());
+		p.setSpeed(2);
+		entities.add(p);
+		
+		p = new Platform(tileMap, keys, 20 * tileMap.gts(), 5 * tileMap.gts());
+		p.addPoint(21 * tileMap.gts(), 8 * tileMap.gts());
+		p.setSpeed(1);
+		entities.add(p);
 		
 	}
 	
@@ -75,10 +78,18 @@ public class Level1State extends GameState
 		mountains.setPosition((int)tileMap.getx(), (int)tileMap.gety());
 		clouds.setPosition(tileMap.getx(), tileMap.gety());
 		
-		for (Platform p: platforms)
+		for (Entity p: entities)
 		{
 			p.update();
 		}
+		
+		if (player.getIsDead())
+		{
+			System.out.println("SDASDASD");
+			player.setTilePosition(15, 12);
+			player.init();
+		}
+		
 	}
 
 	public void draw(Graphics2D g)
@@ -91,9 +102,9 @@ public class Level1State extends GameState
 		
 		player.draw(g);
 		
-		for (Platform p: platforms)
+		for (Entity e: entities)
 		{
-			p.draw(g);
+			e.draw(g);
 		}
 	}
 
