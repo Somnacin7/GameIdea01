@@ -39,7 +39,7 @@ public class Player extends Entity
 	private final int BOX_WIDTH = 13;
 	private final int BOX_HEIGHT = 26;
 	private Rectangle[][] surroundingTiles; // Holds whether or not the surrounding tiles collide
-	private ArrayList<Collidable> collisions;
+	private ArrayList<Collidable> collidables;
 
 	private boolean hasTeleported;
 
@@ -63,6 +63,8 @@ public class Player extends Entity
 		currentState = STANDING;
 		surroundingTiles = new Rectangle[3][3];
 		isDead = false;
+		
+		collidables = new ArrayList<Collidable>();
 	}
 
 	public void processInput(Keys keys)
@@ -88,54 +90,9 @@ public class Player extends Entity
 		System.out.println(currentState.getClass().getSimpleName());
 	}
 
-	public void checkYCollision()
+	public void incrementx()
 	{
-		boundingBox = new Rectangle((int) x + H_OFFSET, (int) y + V_OFFSET, BOX_WIDTH, BOX_HEIGHT);
-
-		int xcol = (int) x / tileMap.getTileSize();
-		int yrow = (int) y / tileMap.getTileSize();
-
-		for (int r = yrow - 1; r < 4; r++)
-		{
-			for (int c = xcol - 1; c < 4; c++)
-			{
-				// Continue if out of bounds
-				if ((r < 0 || c < 0) || (r >= surroundingTiles.length || c >= surroundingTiles[0].length))
-				{
-					continue;
-				}
-
-				if (tileMap.getTileCollision(r, c))
-				{
-					surroundingTiles[r][c] = new Rectangle(c * tileMap.getTileSize(), r * tileMap.getTileSize(), tileMap.getTileSize(), tileMap.getTileSize());
-				}
-				else
-					surroundingTiles[r][c] = new Rectangle(0, 0, 0, 0); // Pretty much a null rectangle
-			}
-		}
-
-		for (int c = 0; c < 3; c++)
-		{
-			if (boundingBox.intersects(surroundingTiles[0][c]))
-			{
-				y = surroundingTiles[0][c].getY() + tileMap.getTileSize() - V_OFFSET;
-				dy = 0;
-			}
-		}
-
-		for (int c = 0; c < 3; c++)
-		{
-			if (boundingBox.intersects(surroundingTiles[2][c]))
-			{
-				y = surroundingTiles[2][c].getY() - tileMap.getTileSize() * 2 + 2;
-				dy = 0;
-			}
-		}
-	}
-
-	public void incrementy()
-	{
-		y += dy;
+		x += dx;
 	}
 
 	public void checkXCollision()
@@ -182,10 +139,125 @@ public class Player extends Entity
 		}
 	}
 
-	public void incrementx()
+	
+	
+	public void incrementy()
 	{
-		x += dx;
+		y += dy;
 	}
+	
+	public void checkYCollision()
+	{
+		boundingBox = new Rectangle((int) x + H_OFFSET, (int) y + V_OFFSET, BOX_WIDTH, BOX_HEIGHT);
+
+		int xcol = (int) x / tileMap.getTileSize();
+		int yrow = (int) y / tileMap.getTileSize();
+
+		for (int r = yrow - 1; r < 4; r++)
+		{
+			for (int c = xcol - 1; c < 4; c++)
+			{
+				// Continue if out of bounds
+				if ((r < 0 || c < 0) || (r >= surroundingTiles.length || c >= surroundingTiles[0].length))
+				{
+					continue;
+				}
+
+				if (tileMap.getTileCollision(r, c))
+				{
+					surroundingTiles[r][c] = new Rectangle(c * tileMap.getTileSize(), r * tileMap.getTileSize(), tileMap.getTileSize(), tileMap.getTileSize());
+				}
+				else
+					surroundingTiles[r][c] = new Rectangle(0, 0, 0, 0); // Pretty much a null rectangle
+			}
+		}
+
+		for (int c = 0; c < 3; c++)
+		{
+			if (boundingBox.intersects(surroundingTiles[0][c]))
+			{
+				y = surroundingTiles[0][c].getY() + tileMap.getTileSize() - V_OFFSET;
+				dy = 0;
+			}
+		}
+
+		for (int c = 0; c < 3; c++)
+		{
+			if (boundingBox.intersects(surroundingTiles[2][c]))
+			{
+				y = surroundingTiles[2][c].getY() - tileMap.getTileSize() * 2 + 2;
+				dy = 0;
+			}
+		}
+	}
+	
+	
+	
+	public void checkXCollidables()
+	{
+		boundingBox = new Rectangle((int) x + H_OFFSET, (int) y + V_OFFSET, BOX_WIDTH, BOX_HEIGHT);
+		
+		// Collidables should be well spaced, to prevent multiple collisions
+		for (Collidable coll : collidables)
+		{
+			Rectangle collBox = coll.getBoundingBox();
+			if (boundingBox.intersects(collBox))
+			{
+				dx = 0;
+				
+				Rectangle inter = boundingBox.intersection(collBox);
+				
+				if (x > collBox.getX())
+				{
+					x += inter.getWidth();
+				}
+				else if (x < collBox.getX())
+				{
+					x -= inter.getWidth();
+				}
+				else
+				{
+					assert false : "This should not happen";
+				}
+				
+			}
+		}
+
+	}
+	
+	public void checkYCollidables()
+	{
+		boundingBox = new Rectangle((int) x + H_OFFSET, (int) y + V_OFFSET, BOX_WIDTH, BOX_HEIGHT);
+		
+		// Collidables should be well spaced, to prevent multiple collisions
+		for (Collidable coll : collidables)
+		{
+			Rectangle collBox = coll.getBoundingBox();
+			if (boundingBox.intersects(collBox))
+			{
+				dy = 0;
+				
+				Rectangle inter = boundingBox.intersection(collBox);
+				
+				if (y > collBox.getY())
+				{
+					y += inter.getHeight();
+				}
+				else if (y < collBox.getY())
+				{
+					y -= inter.getHeight();
+				}
+				else
+				{
+					assert false : "This should not happen";
+				}
+				
+			}
+		}
+
+	}
+
+	
 
 	public void applyGravity()
 	{
@@ -326,6 +398,16 @@ public class Player extends Entity
 	public void kill()
 	{
 		isDead = true;
+	}
+	
+	public void setCollidables(ArrayList<Collidable> c)
+	{
+		collidables = c;
+	}
+	
+	public void addCollidables(Collidable c)
+	{
+		collidables.add(c);
 	}
 	
 }

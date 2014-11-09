@@ -7,6 +7,7 @@ import map.Background;
 import map.TileMap;
 import utility.Keys;
 import entity.Entity;
+import entity.objects.Collidable;
 import entity.objects.Platform;
 import entity.player.Player;
 import game.GamePanel;
@@ -31,6 +32,8 @@ public class Level1State extends GameState
 		this.keys = keys;
 	}
 
+	// TODO Add for-each to add all Collidables to player collisions?
+	// Or add each one individually?
 	public void init()
 	{
 		// Background init
@@ -58,11 +61,14 @@ public class Level1State extends GameState
 		p.addPoint(14 * tileMap.gts(), 6 * tileMap.gts());
 		p.setSpeed(2);
 		entities.add(p);
+		player.addCollidables(p);
 		
 		p = new Platform(tileMap, keys, 20 * tileMap.gts(), 5 * tileMap.gts());
 		p.addPoint(21 * tileMap.gts(), 8 * tileMap.gts());
 		p.setSpeed(1);
 		entities.add(p);
+		player.addCollidables(p);
+		
 		
 	}
 	
@@ -100,12 +106,13 @@ public class Level1State extends GameState
 		
 		tileMap.draw(g);
 		
-		player.draw(g);
-		
 		for (Entity e: entities)
 		{
 			e.draw(g);
 		}
+		
+		player.draw(g);
+		
 	}
 
 	

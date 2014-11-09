@@ -113,10 +113,14 @@ public class PlayerStateJumping implements PlayerState
 		player.applyGravity();
 
 		player.incrementx();
+		
+		player.checkXCollidables();
 
 		player.checkXCollision();
 
 		player.incrementy();
+		
+		player.checkYCollidables();
 
 		player.checkYCollision();
 	}

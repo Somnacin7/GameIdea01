@@ -12,15 +12,15 @@ public class Entity
 	protected double ymap;
 	public void update()
 	{
-		System.out.println("Your forgot to override update");
+		assert false : "Your forgot to override update()";
 	}
 	public void processKeys()
 	{
-		System.out.println("You forgot to override processKeys");
+		assert false : "You forgot to override processKeys()";
 	}
 	public void draw(Graphics2D g)
 	{
-		System.out.println("You forgot to override draw");
+		assert false : "You forgot to override draw()";
 	}
 	
 	

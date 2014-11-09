@@ -53,7 +53,7 @@ public class Platform extends Entity implements Collidable
 	public void init()
 	{
 		animation = new Animation("/objects/platform.png", 1, 32, 16);
-		animation.setDelay(-1);
+		animation.setDelay(-1); // No animation
 		
 		addPoint((int) x,(int) y);
 		currentPoint = points.get(0);
